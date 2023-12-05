@@ -7,7 +7,7 @@ const Register = () => {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassowrd] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const {createUser, error: authError, loading} = useAuthentication();
@@ -85,7 +85,7 @@ const Register = () => {
           required 
           placeholder="Confirm Password"
           value={confirmPassword}
-          onChange={(e)=> setConfirmPassowrd(e.target.value)}
+          onChange={(e)=> setConfirmPassword(e.target.value)}
           />
         </label>
         {!loading && <button className="btn">Sign up</button>}
