@@ -2,8 +2,7 @@ import {db} from "../firebase/config";
 
 import {
     getAuth,
-    ceateUserWithEmailAndPassowrd,
-    SignInWithEmailAndPassword,
+    signInWithEmailAndPassword,
     updateProfile,
     signOut,
     createUserWithEmailAndPassword
@@ -27,11 +26,11 @@ export const useAuthentication = () => {
         }
     }
 
+    //register
     const createUser = async (data) => {
         checkIfIsCancelled()
 
         setLoading(true)
-        setError(null);
         try{
             const {user} = await createUserWithEmailAndPassword(
                 auth,
@@ -41,7 +40,6 @@ export const useAuthentication = () => {
             await updateProfile(user, {
                 displayName:data.displayName
             });
-        setLoading(false);
         return user;
 
         }
@@ -49,7 +47,7 @@ export const useAuthentication = () => {
             console.log(error.message);
             console.log(typeof error.message);
 
-            let systemErrorMessage
+            let systemErrorMessage;
 
             if(error.message.includes("Password")){
                 systemErrorMessage = " The password must contain at least 6 characters."
@@ -60,10 +58,43 @@ export const useAuthentication = () => {
             else{
                 systemErrorMessage = "An error occurred, please try again later."
         }
-        setLoading(false);
         setError(systemErrorMessage);
     };
+    setLoading(false);
+
     };
+
+    const logout = () => {
+        checkIfIsCancelled();
+        signOut(auth);
+    }
+
+    const login = async(data) => {
+        checkIfIsCancelled();
+        setLoading(true);
+        setError(false);
+
+        try{
+            if (!data.email || !data.password) {
+                throw new Error("Email and password are required.");
+            }
+            await signInWithEmailAndPassword(auth, data.email, data.password)
+        }catch (error){
+            console.error("Firebase Authentication Error:", error);
+            let systemErrorMessage;
+
+            if (error.message.includes('user-not-found')) {
+                systemErrorMessage = 'User not found.';
+            } else if (error.message.includes('wrong-password')) {
+                systemErrorMessage = 'Wrong password.';
+            } else {
+                systemErrorMessage = 'An error occurred, please try again later.';
+            }
+        setError(systemErrorMessage);
+    }
+    setLoading(false);
+
+}
 
     //No memory leak
     useEffect(() => {
@@ -74,6 +105,8 @@ export const useAuthentication = () => {
         auth,
         createUser,
         error,
-        loading
-    }
+        loading,
+        logout,
+        login,
+    };
 }
