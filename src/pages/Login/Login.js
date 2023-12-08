@@ -1,5 +1,7 @@
 import styles from "./Login.module.css"
 
+import { Link } from "react-router-dom";
+
 import { useState, useEffect } from "react"
 import { useAuthentication } from "../../hooks/useAuthentication";
 
@@ -57,10 +59,12 @@ const Login = () => {
           onChange={(e)=> setPassword(e.target.value)}
           />
         </label>
+        
         {!loading && <button className="btn">Sign in</button>}
         {loading && <button className="btn" disabled>Waiting...</button>}
         {error && <p className="error">{error}</p>}
       </form>
+
     </div>
   )
 }
