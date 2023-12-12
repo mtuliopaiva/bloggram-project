@@ -5,3 +5,12 @@
 .login p{
     color: #aaa;
 }
+.login-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-links a{
+    margin: 20px 0;
+  }

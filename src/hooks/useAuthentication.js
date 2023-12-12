@@ -6,6 +6,7 @@ import {
   updateProfile,
   signOut,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 import { useState, useEffect } from "react";
@@ -97,6 +98,28 @@ export const useAuthentication = () => {
     }
   };
 
+  const resetPassword = async (email) => {
+    checkIfIsCancelled();
+
+    setLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.log("Error sending password reset email:", error.message);
+
+      let systemErrorMessage;
+
+      if (error.message.includes("email-not-found")) {
+        systemErrorMessage = "Email not found. Please check your email and try again.";
+      } else {
+        systemErrorMessage = "An error occurred, please try again later.";
+      }
+
+      setError(systemErrorMessage);
+    }
+    setLoading(false);
+  };
+
   //No memory leak
   useEffect(() => {
     return () => setCancelled(true);
@@ -109,5 +132,6 @@ export const useAuthentication = () => {
     loading,
     logout,
     login,
+    resetPassword
   };
 };
