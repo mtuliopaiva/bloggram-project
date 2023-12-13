@@ -2,6 +2,9 @@ import { useState } from "react";
 import styles from "./CreatePost.module.css";
 import { useInsertDocument } from "../../hooks/useInsertDocument";
 import { useAuthValue } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
@@ -11,6 +14,7 @@ const CreatePost = () => {
 
   const {user} = useAuthValue();
   const {insertDocument, response} = useInsertDocument("posts");
+  const navigate = useNavigate();
 
 
   const handleSubmit = (event) => {
@@ -18,18 +22,30 @@ const CreatePost = () => {
     setFormError("");
 
     //validate image url
+    try {
+      // creating new image with js object
+      new URL(image);
+    } catch (error) {
+      setFormError("The image needs to be a valid URL.");
+      return; // Adiciona o return aqui para evitar que o código continue executando
+    }
     //createarray - tags
+    const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
+    if(!title || !image || !tags || !body){
+      setFormError("Please fill in the fields correctly")
+    }
     //check values
 
+    if(formError) return;
     insertDocument({
       title,
       image,
       body,
-      tags,
+      tagsArray,
       uid: user.uid,
       createdBy: user.displayName
     })
-    //redirect to home page
+    navigate("/");
   };
 
   return (
@@ -63,8 +79,7 @@ const CreatePost = () => {
 
         <label>
           <span>Content:</span>
-          <input
-            type="textarea"
+          <textarea
             name="body"
             required
             placeholder="Insert the post's content"
@@ -87,6 +102,8 @@ const CreatePost = () => {
         {!response.loading && <button className="btn">Share</button>}
         {response.loading && <button className="btn" disabled>Loading...</button>}
         {response.error && <p className="error">{response.error}</p>}
+        {formError && <p className="error">{formError}</p>}
+
       </form>
     </div>
   );
