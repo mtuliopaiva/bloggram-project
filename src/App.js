@@ -20,6 +20,8 @@ import { useAuthentication } from "./hooks/useAuthentication";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ForgotPassword from "./pages/Forgot-password/ForgotPassword";
+import Search from "./pages/Search/Search";
+import Post from "./pages/Post/Post";
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -47,6 +49,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/posts/:id" element={<Post />} />
               <Route path="/login" element={!user ? <Login /> : <Navigate to ="/" /> } />
               <Route path="/forgot-password" element={!user ? <ForgotPassword/> : <Navigate to="/" /> } />
               <Route path="/register" element={!user ? <Register /> : <Navigate to ="/" /> } />

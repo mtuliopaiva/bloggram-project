@@ -7,13 +7,22 @@ import { useState } from "react";
 import { useFetchDocuments } from "../../hooks/useFetchDocuments";
 
 //components
+import PostDetail from "../../components/PostDetail";
+
 
 const Home = () => {
   const [query,setQuery] = useState("");
+  //Passing the collection posts
   const {documents: posts, loading} = useFetchDocuments("posts");
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if(query){
+      return navigate(`/search?q=${query}`)
+    }
   }
   console.log(posts);
 
@@ -26,9 +35,9 @@ const Home = () => {
         <button className="btn btn-dark">Search</button>
       </form>
       <div className="post-list">
-      {loading && <p>Carregando...</p>}
+      {loading && <p>Loading...</p>}
         {posts && posts.map((post) => (
-          <h3>{post.title}</h3>
+          <h3><PostDetail key={post.id} post={post}/></h3>
         ))}
         {posts && posts.length ===0 && (
           <div className={styles.noposts}>
