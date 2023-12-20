@@ -42,7 +42,8 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
             where("uid", "==", uid),
             orderBy("createdAt", "desc")
           );
-        } else {
+        }
+         else {
           q = await query(collectionRef, orderBy("createdAt", "desc"));
         }
 
@@ -63,9 +64,7 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
     }
 
     loadData();
-  }, [docCollection,documents, search, uid, cancelled]);
-
-  console.log(documents);
+  }, [docCollection, search, uid, cancelled]);
 
   useEffect(() => {
     return () => setCancelled(true);

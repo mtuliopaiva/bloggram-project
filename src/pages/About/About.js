@@ -8,7 +8,7 @@ const About = () => {
       <h2>About the</h2> <span>BlogGram</span>
       <p>This is the Bloggram. Your favorite social network.</p>
       <p>This project was made using ReactJS and Firebase.</p>
-      <Link to={"/post/create"} className="btn">
+      <Link to={"/posts/create"} className="btn">
         Post it!
       </Link>
     </div>
