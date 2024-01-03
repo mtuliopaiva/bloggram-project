@@ -22,6 +22,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import ForgotPassword from "./pages/Forgot-password/ForgotPassword";
 import Search from "./pages/Search/Search";
 import Post from "./pages/Post/Post";
+import EditPost from "./pages/EditPost/EditPost";
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -33,7 +34,7 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       setUser(user);
       console.log(user);
-    })
+    });
   }, [auth]);
 
   if (loadingUser) {
@@ -42,7 +43,7 @@ function App() {
 
   return (
     <div className="App">
-      <AuthProvider value={{user}}>
+      <AuthProvider value={{ user }}>
         <BrowserRouter>
           <Navbar />
           <div className="container">
@@ -51,12 +52,30 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/search" element={<Search />} />
               <Route path="/posts/:id" element={<Post />} />
-              <Route path="/login" element={!user ? <Login /> : <Navigate to ="/" /> } />
-              <Route path="/forgot-password" element={!user ? <ForgotPassword/> : <Navigate to="/" /> } />
-              <Route path="/register" element={!user ? <Register /> : <Navigate to ="/" /> } />
-              <Route path="posts/create" element={user ? <CreatePost /> : <Navigate to ="/login" /> }></Route>
-              <Route path="dashboard" element={user ? <Dashboard /> : <Navigate to ="/login" /> }></Route>
-
+              <Route
+                path="/login"
+                element={!user ? <Login /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/forgot-password"
+                element={!user ? <ForgotPassword /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/register"
+                element={!user ? <Register /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/posts/edit/:id"
+                element={user ? <EditPost /> : <Navigate to="/login" />}
+              ></Route>
+              <Route
+                path="posts/create"
+                element={user ? <CreatePost /> : <Navigate to="/login" />}
+              ></Route>
+              <Route
+                path="dashboard"
+                element={user ? <Dashboard /> : <Navigate to="/login" />}
+              ></Route>
             </Routes>
           </div>
           <Footer />
